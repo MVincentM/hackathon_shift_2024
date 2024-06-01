@@ -24,20 +24,26 @@
               Who do you want to recruit?
             </label>
             <div className="flex items-center gap-2">
-
-            <input
-              id="JobTitleInput"
-              type="text"
-              class="py-2 w-[150px] outline-none rounded-md text-xs placeholder:text-gray-400 truncate"
-              placeholder="Enter a job title..."
-            />
-            <button id="getDataButton" class="text-xs border-b-2 border-[#6d4806]">Validate</button>
+              <input
+                id="JobTitleInput"
+                type="text"
+                class="py-2 w-[150px] outline-none rounded-md text-xs placeholder:text-gray-400 truncate"
+                placeholder="Enter a job title..."
+              />
+              <button
+                id="getDataButton"
+                class="text-xs border-b-2 border-[#6d4806]"
+              >
+                Validate
+              </button>
             </div>
-
           </div>
           <div class="flex flex-col items-center space-y-4">
             <p class="font-semibold text-xs text-gray-500">OR</p>
-            <button class="text-xs border-b-2 border-[#6d4806]" id="extractButton">
+            <button
+              class="text-xs border-b-2 border-[#6d4806]"
+              id="extractButton"
+            >
               Extract from current page
             </button>
           </div>
@@ -45,21 +51,32 @@
 
         <div id="searchLoadingBlock" class="hidden">
           <div class="flex items-center justify-center">
-            <h3 class="text-sm font-semibold text-gray-500">Searchig for the <span class="text-[#f5cf85]">best filters</span></h3>
+            <h3 class="text-sm font-semibold text-gray-500">
+              Searchig for the <span class="text-[#f5cf85]">best filters</span>
+            </h3>
             <div class="flex gap-[1px]">
               <span class="animate-ping-custom">.</span>
-              <span class="animate-ping-custom" style="-webkit-animation-delay: 33ms;">.</span>
-              <span class="animate-ping-custom" style="-webkit-animation-delay: 66ms;">.</span>
+              <span
+                class="animate-ping-custom"
+                style="-webkit-animation-delay: 33ms"
+                >.</span
+              >
+              <span
+                class="animate-ping-custom"
+                style="-webkit-animation-delay: 66ms"
+                >.</span
+              >
             </div>
           </div>
         </div>
 
         <div id="results" class="flex flex-col hidden">
           <h1 class="text-sm font-semibold text-gray-500">
-            Here are the filters you could use to find some <span id="job-title" class="text-[#f5cf85]"></span>(s)!
+            Here are the filters you could use to find some
+            <span id="job-title" class="text-[#f5cf85]"></span>(s)!
           </h1>
 
-            <div id="words-container"></div>
+          <div id="words-container"></div>
         </div>
       </div>
     </div>
