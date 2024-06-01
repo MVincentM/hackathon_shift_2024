@@ -23,13 +23,20 @@ class SearchGenerator {
   }
 
   generateDropdown(words, key) {
-    let html = `<div class="dropdown-words"><b>${key}</b>`;
+
+    let html = `            
+    <div class="dropdown-words mt-2">
+      <h3 class="text-xs text-gray-400 capitalize">${key}</h3>
+      <ul class="mt-1 flex gap-1 flex-wrap">
+    `
 
     for (let word of words) {
-      html += `<div class="word" data-word="${word}">${word}</div>`;
+      html += `        
+      <li class="px-2 p-1 text-xs word-unselected rounded-md" data-word="${word}">${word}</li>
+      `;
     }
 
-    html += "</div>";
+    html += "</ul>";
 
     document.getElementById("words-container").innerHTML += html;
   }

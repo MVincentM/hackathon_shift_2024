@@ -1,22 +1,71 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="UTF-8">
-    <link href="styles.css" rel="stylesheet"/>
+    <meta charset="UTF-8" />
+    <link href="styles.css" rel="stylesheet" />
     <title>Job Title Extractor</title>
   </head>
   <body>
-    <h1>Job Title Extractor</h1>
-    <input id="JobTitleInput">
-    <button id="getDataButton">Rechercher</button>
-    <button id="extractButton">Extract Job Title</button>
-    <label><b>Job title found :</b></label>
-    <p id="job-title"></p>
-    <div id="results">
+    <div class="bg-gray-200 h-full flex items-center justify-center">
+      <div
+        class="flex flex-col bg-white rounded-md w-[500px] p-4 gap-4 shadow-md"
+      >
+        <div class="flex items-center gap-4">
+          <img class="h-10" src="/logo.png" alt="Kalent" />
+          <h1 class="text-xl text-[#6d4806]">
+            JobiJobAI,
+            <span class="ml-1 text-[#f5cf85]">Filters, Faster... Stronger</span>
+          </h1>
+        </div>
 
-    <div id="words-container"></div>
+        <div id="searchBlock" class="flex flex-col items-center my-2 space-y-4">
+          <div class="flex flex-col">
+            <label htmlFor="" class="text-gray-500 text-sm">
+              Who do you want to recruit?
+            </label>
+            <div className="flex items-center gap-2">
 
+            <input
+              id="JobTitleInput"
+              type="text"
+              class="py-2 w-[150px] outline-none rounded-md text-xs placeholder:text-gray-400 truncate"
+              placeholder="Enter a job title..."
+            />
+            <button id="getDataButton" class="text-xs border-b-2 border-[#6d4806]">Validate</button>
+            </div>
+
+          </div>
+          <div class="flex flex-col items-center space-y-4">
+            <p class="font-semibold text-xs text-gray-500">OR</p>
+            <button class="text-xs border-b-2 border-[#6d4806]" id="extractButton">
+              Extract from current page
+            </button>
+          </div>
+        </div>
+
+        <div id="searchLoadingBlock" class="hidden">
+          <div class="flex items-center justify-center">
+            <h3 class="text-sm font-semibold text-gray-500">Searchig for the <span class="text-[#f5cf85]">best filters</span></h3>
+            <div class="flex gap-[1px]">
+              <span class="animate-ping-custom">.</span>
+              <span class="animate-ping-custom" style="-webkit-animation-delay: 33ms;">.</span>
+              <span class="animate-ping-custom" style="-webkit-animation-delay: 66ms;">.</span>
+            </div>
+          </div>
+        </div>
+
+        <div id="results" class="flex flex-col hidden">
+          <h1 class="text-sm font-semibold text-gray-500">
+            Here are the filters you could use to find some <span id="job-title" class="text-[#f5cf85]"></span>(s)!
+          </h1>
+
+            <div id="words-container"></div>
+        </div>
+      </div>
     </div>
+
+    <!-- <script src="https://unpkg.com/tailwindcss-cdn@3.4.3/tailwindcss.js"></script> -->
+    <script src="tailwindcss.js"></script>
     <script src="popup.js"></script>
     <script src="DataExtractor/HTMLExtractor.js"></script>
     <script src="DataExtractor/DataExtractor.js"></script>

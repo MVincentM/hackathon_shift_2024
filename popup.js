@@ -1,5 +1,8 @@
 
 document.getElementById("extractButton").addEventListener("click", async () => {
+  document.getElementById("searchBlock").style.display = 'none'
+  document.getElementById("searchLoadingBlock").style.display = 'block'
+
   chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
     // Get the job title
     chrome.scripting.executeScript(
@@ -23,6 +26,9 @@ document.getElementById("extractButton").addEventListener("click", async () => {
 
 
 document.getElementById("getDataButton").addEventListener("click", async () => {
+  document.getElementById("searchBlock").style.display = 'none'
+  document.getElementById("searchLoadingBlock").style.display = 'block'
+
   chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
 
     const search = document.getElementById('JobTitleInput').value;

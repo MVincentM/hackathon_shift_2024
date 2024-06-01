@@ -45,6 +45,9 @@ class DataExtractor {
         searchGenerator.generateHTML();
 
         document.getElementById("job-title").textContent = this.jobTitle;
+        document.getElementById("results").style.display = 'flex'
+        document.getElementById("searchLoadingBlock").style.display = 'none'
+
     } catch (error) {
         console.error("Erreur lors de l'appel à l'API ChatGPT:", error);
         document.getElementById("job-title").textContent =
