@@ -1,0 +1,21 @@
+{
+    "manifest_version": 3,
+    "name": "Job Title Extractor",
+    "version": "1.0",
+    "description": "Extracts the job title from a job posting page.",
+    "permissions": ["tabs", "activeTab", "scripting"],
+    "action": {
+      "default_popup": "popup.html",
+      "default_icon": {
+        
+      }
+    },
+    "background": {
+    },
+    "content_scripts": [
+      {
+        "matches": ["<all_urls>"],
+        "js": ["content.js"]
+      }
+    ]
+}

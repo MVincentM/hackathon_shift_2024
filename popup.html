@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <link href="styles.css" rel="stylesheet"/>
+    <title>Job Title Extractor</title>
+  </head>
+  <body>
+    <h1>Job Title Extractor</h1>
+    <input id="JobTitleInput">
+    <button id="getDataButton">Rechercher</button>
+    <button id="extractButton">Extract Job Title</button>
+    <label><b>Job title found :</b></label>
+    <p id="job-title"></p>
+    <div id="results">
+
+    <div id="words-container"></div>
+
+    </div>
+    <script src="popup.js"></script>
+    <script src="DataExtractor/HTMLExtractor.js"></script>
+    <script src="DataExtractor/DataExtractor.js"></script>
+    <script src="SearchGenerator/SearchGenerator.js"></script>
+    <script src="SearchGenerator/SearchManager.js"></script>
+    <script src="constants.js"></script>
+  </body>
+</html>
