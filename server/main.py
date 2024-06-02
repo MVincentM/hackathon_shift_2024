@@ -49,8 +49,8 @@ INDEX_ENDPOINT = "projects/145034832321/locations/europe-west1/indexEndpoints/49
 DEPLOYED_INDEX_ID = "jobijobai_vector_index_1717275097441"
 PROJECT_ID = "shift-aihack-nantes24-10"
 REGION = "europe-west1"
-#TEXT_MODEL = "gemini-pro"
-TEXT_MODEL = "gemini-1.5-flash-001"
+TEXT_MODEL = "gemini-pro"
+#TEXT_MODEL = "gemini-1.5-flash-001"
 
 client_options = { "api_endpoint": API_ENDPOINT }
 
@@ -115,7 +115,8 @@ def execute_prompt(prompt, input):
     system_instruction=prompt
     )
     gen_response = model.generate_content(input)
-    return gen_response.text
+    
+    return gen_response.text.replace("```json", "").replace("```", "")
 
 def format_row(row, original_job_title):
     prompt = """
@@ -124,7 +125,7 @@ You are an expert in HR. From a set of verbose skills that describe a job role, 
     Example with a Data Scientist:
     {
         "search_base": ["python", "data science", "machine learning", "master"],
-        "synonyms": ["IngÃ©nieur statisticien", "ML Engineer", "Data Analyst", ...]
+        "synonyms": ["Ingénieur statisticien", "ML Engineer", "Data Analyst", ...]
         "programming_languages": ["python", "java", "javascript"],
         "frameworks": ["django", "flask", "spring"],
         "technologies": ["aws", "azure", "gcp"],
@@ -140,10 +141,12 @@ You are an expert in HR. From a set of verbose skills that describe a job role, 
       - Synonyms are common alternative names for the job title that will provide qualified candidates for the original job title (use French and English).
       - Technologies must correspond to a technology name (eg. "aws", "azure", "gcp", "android", etc.)
       - Certifications must correspond to a certification name (eg. "certification AWS", "certification Azure", etc.)
-      - All JSON keys given as example are facultative except for "search_base" which must contain up to the 10 most relevant keywords overall (from any other category).
       - The example given above is a short, simplified version of what you can do, don't hesitate to extract more keywords from the skills description.
 
-**IT IS CRUCIAL THAT YOU ONLY OUTPUT THE RAW JSON WITHOUT ANY MARKDOWN**
+
+"search_base" should contain values coming from the other properties. Take at least 2 from synonyms and at most 10 terms in total.
+
+      
 """
     input = """
     Job title: %s
@@ -174,7 +177,8 @@ def get_filters():
       }
     else:
       j = jobs.iloc[0]
-    return format_row(j, title)
+    final_result = format_row(j, title)
+    return final_result
 
 
 if __name__ == "__main__":

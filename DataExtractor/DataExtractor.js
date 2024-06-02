@@ -13,6 +13,7 @@ class DataExtractor {
     try {
         const response = await fetch(
         "https://hackathon-shift-2024-ds3lzb7qqq-ew.a.run.app/",
+        //"http://localhost:8080/",
         {
             method: "POST",
             headers: {
