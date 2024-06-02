@@ -38,3 +38,20 @@ table td {
 .word {
 	cursor: pointer;
 }
+
+#generated-search {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.selected-word {
+  margin: 4px;
+  cursor: pointer;
+}
+
+.operator {
+  margin: 4px;
+  cursor: pointer;
+}

@@ -6,20 +6,23 @@ class SearchGenerator {
   generateHTML() {
     const generator = this;
     const datas = this.arrayData;
-    Object.keys(datas).forEach(function (key, index, value) {
-      console.log(key);
-      console.log(index);
-      console.log(value);
 
-      if (key !== "search_base" && datas[key] instanceof Array) {
+    const words = [];
+    const selectedWords = [];
+
+    document.getElementById("words-container").innerHTML = ''; // Clean
+
+    Object.keys(datas).forEach(function (key) {
+      if (key !== 'search_base' && datas[key] instanceof Array) {
         generator.generateDropdown(datas[key], key);
-        for (let d of datas[key]) {
-          console.log(d);
-        }
+
+        words.push(datas[key]);
+      } else if (key === 'search_base') {
+        selectedWords.push(datas[key]);
       }
     });
 
-    new SearchManager();
+    new SearchManager(words, selectedWords);
   }
 
   generateDropdown(words, key) {
