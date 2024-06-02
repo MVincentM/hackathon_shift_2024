@@ -44,7 +44,7 @@ class DataExtractor {
         const searchGenerator = new SearchGenerator(data);
         searchGenerator.generateHTML();
 
-        document.getElementById("job-title").textContent = this.jobTitle;
+        document.getElementById("job-title").append(this.jobTitle)
         document.getElementById("results").style.display = 'flex'
         document.getElementById("searchLoadingBlock").style.display = 'none'
 

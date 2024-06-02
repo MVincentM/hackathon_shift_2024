@@ -21,15 +21,14 @@ table td {
 }
 
 .word-selected {
-  background-color: #6d4806b3;
   --tw-text-opacity: 1;
-  color: rgb(245 207 133 / var(--tw-text-opacity));
+  color: rgb(240 156 86 / var(--tw-text-opacity));
+  background: black;
 }
 
 .word-unselected {
-  --tw-text-opacity: 1;
-  color: rgb(109 72 6 / var(--tw-text-opacity));
-  background-color: #f5cf8599;
+  color: black;
+  background-color: #f09c5680;
 }
 
 .animate-ping-custom {
