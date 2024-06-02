@@ -8,7 +8,6 @@ class DataExtractor {
     async extractData() {
 
     const prompt = jobTitleDataExtractor.replace('{{jobTitle}}', this.jobTitle);
-    console.log(prompt);
 
     // Call OpenAI
     try {
@@ -39,7 +38,6 @@ class DataExtractor {
         let result = ((await response.json()).choices[0].message.content).replace('```json', '').replace('```', '');
 
         const data = JSON.parse(result);
-        console.log(data);
 
         const searchGenerator = new SearchGenerator(data);
         searchGenerator.generateHTML();

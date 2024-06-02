@@ -41,3 +41,32 @@ table td {
     opacity: 0;
   }
 }
+
+#generated-search {
+  display: flex;
+  flex-direction: row;  
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.selected-word {
+  margin: 4px;
+  cursor: pointer;
+}
+
+.operator {
+  margin: 4px;
+  cursor: pointer;
+}
+
+/*.search-word {
+  --tw-text-opacity: 1;
+  color: rgb(240 156 86 / var(--tw-text-opacity));
+  background: #00f5a3;
+}*/
+
+/*.operator {
+  --tw-text-opacity: 1;
+  color: rgb(240 156 86 / var(--tw-text-opacity));
+  background: #8bf500;
+}*/

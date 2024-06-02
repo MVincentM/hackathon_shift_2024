@@ -66,8 +66,6 @@ class HTMLExtractor {
     const cleanHtml = this.html.replace(/<[^>]*>/g, "");
     let prompt = extractJobTitlePrompt.replace("{{data}}", cleanHtml);
 
-    console.log(prompt);
-
     // Call OpenAI
     try {
       const response = await fetch(
@@ -90,7 +88,6 @@ class HTMLExtractor {
       }
 
       const data = await response.json();
-      console.log(data);
 
       const jobTitle = data.choices[0].message.content;
 
@@ -109,68 +106,4 @@ class HTMLExtractor {
       document.getElementById("job-title").textContent = "Erreur lors de l'appel à l'API";
     }
   }
-
-  /*async getJobTitleSynonyms(jobTitle) {
-    // Call OpenAI
-    try {
-      const response = await fetch(
-        "https://api.openai.com/v1/chat/completions",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${OPEN_AI_KEY}`,
-          },
-          body: JSON.stringify({
-            model: "gpt-4o", // Utilisez le modèle que vous souhaitez
-            messages: [
-              { role: "system", content: jobTitleSynonymsPrompt },
-              { role: "user", content: jobTitle },
-            ],
-            temperature: 0.7
-          }),
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error(`Erreur HTTP! statut: ${response.status}`);
-      }
-
-      const data = JSON.parse((await response.json()).choices[0].message.content);
-      console.log(data);
-
-      // Create the table to display
-      var table = `<table>
-        <tr>
-            <th>Job title</th>
-            <th>Skills</th>
-            <th>Seniority</th>
-            <th>Industries</th>
-            <th>Keywords</th>
-        </tr>`;
-
-      for(const line of data) {
-        table += `
-        <tr>
-            <td>${line.jobTitleClean || ''}</td>
-            <td>${line.skills?.join(', ') || ''}</td>
-            <td>${line.seniority || ''}</td>
-            <td>${line.industries?.join(', ') || ''}</td>
-            <td>${line.keywords?.join(', ') || ''}</td>
-        </tr>
-        `
-      }
-
-      table += "</table>";
-
-      var resultsDiv = document.getElementById("results");
-      resultsDiv.innerHTML = table;
-
-      //document.getElementById("job-title").textContent = jobTitle;
-    } catch (error) {
-      console.error("Erreur lors de l'appel à l'API ChatGPT:", error);
-      document.getElementById("job-title").textContent =
-        "Erreur lors de l'appel à l'API";
-    }
-  }*/
 }
