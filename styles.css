@@ -18,6 +18,8 @@ table td {
 
 .word {
   cursor: pointer;
+
+  height: 24px;
 }
 
 .word-selected {

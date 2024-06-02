@@ -44,15 +44,18 @@ class SearchManager {
             //this.selectedWords.splice(this.selectedWords.indexOf(word), 1);
             this.onClickSelectedWord(el);
         } else {
-            this.operatorElements.push(`<div class='operator'>OR</div>`);
-            this.selectedWords.push(word);
+            /*this.operatorElements.push(`<div class='operator'>OR</div>`);
+            this.selectedWords.push(word);*/
+
+            this.searchItems.push(new SearchItem('operator', 'OR'));
+            this.searchItems.push(new SearchItem('word', word));
         }
 
         this.regenerateSearch();
     }
 
     isSelected(word) {
-        return this.selectedWords.some(w => w == word);
+        return (this.searchItems.some(i => i.value === word));
     }
 
     generateSearch2() {

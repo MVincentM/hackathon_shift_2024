@@ -30,7 +30,7 @@ class SearchGenerator {
     let html = `            
     <div class="dropdown-words mt-2">
       <h3 class="text-xs text-gray-400 capitalize">${key}</h3>
-      <ul class="mt-1 flex gap-1 flex-wrap">
+      <ul class="mt-1 flex gap-1 flex-wrap items-center">
     `
 
     for (let word of words) {
