@@ -12,32 +12,21 @@ class DataExtractor {
     // Call OpenAI
     try {
         const response = await fetch(
-        "https://api.openai.com/v1/chat/completions",
+        "https://hackathon-shift-2024-ds3lzb7qqq-ew.a.run.app/",
         {
             method: "POST",
             headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${OPEN_AI_KEY}`,
+            "Content-Type": "application/json"
             },
-            body: JSON.stringify({
-            model: "gpt-4o", // Utilisez le modèle que vous souhaitez
-            messages: [
-                /*{ role: "system", content: jobTitleSynonymsPrompt },
-                { role: "user", content: this.jobTitle },*/
-                { role: "user", content: prompt }
-            ],
-            temperature: 0.7
-            }),
+            body: `"${this.jobTitle}"`
         }
         );
 
         if (!response.ok) {
-        throw new Error(`Erreur HTTP! statut: ${response.status}`);
+            throw new Error(`Erreur HTTP! statut: ${response.status}`);
         }
 
-        let result = ((await response.json()).choices[0].message.content).replace('```json', '').replace('```', '');
-
-        const data = JSON.parse(result);
+        let data = await response.json();
 
         const searchGenerator = new SearchGenerator(data);
         searchGenerator.generateHTML();

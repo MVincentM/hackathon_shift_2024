@@ -91,13 +91,20 @@ class SearchManager {
         // Set CSS class
         for(let word of this.selectedWords) {
             const el = document.querySelector(`[data-word="${word}"]`);
-            console.log((el));
+
+            if(el == null)
+                continue;
 
             el.classList.remove('word-unselected');
             el.classList.add('word-selected');
         }
 
         for (let i = 0; i < this.selectedWords.length; i++) {
+            // If the LLM returns in search_base terms that does not exist in other filters
+            const el = document.querySelector(`[data-word="${this.selectedWords[i]}"]`);
+            if(el == null)
+                continue;
+
             this.searchItems.push(new SearchItem('word', this.selectedWords[i])); // Add word
 
             if (i === this.selectedWords.length - 1) {
@@ -117,6 +124,9 @@ class SearchManager {
         for(let word of this.selectedWords) {
             const el = document.querySelector(`[data-word="${word}"]`);
             console.log((el));
+
+            if(el == null)
+                continue;
 
             el.classList.remove('word-unselected');
             el.classList.add('word-selected');

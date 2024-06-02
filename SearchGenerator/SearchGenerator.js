@@ -34,6 +34,7 @@ class SearchGenerator {
     `
 
     for (let word of words) {
+      console.log(word)
       html += `        
       <li class="word px-2 p-1 text-xs word-unselected rounded-md" data-word="${word}">${word}</li>
       `;
