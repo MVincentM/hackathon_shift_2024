@@ -24,8 +24,8 @@ table td {
 
 .word-selected {
   --tw-text-opacity: 1;
-  color: rgb(240 156 86 / var(--tw-text-opacity));
-  background: black;
+  /*color: rgb(240 156 86 / var(--tw-text-opacity));*/
+  background: #55c946bb;
 }
 
 .word-unselected {

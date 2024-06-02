@@ -42,7 +42,13 @@ class SearchManager {
         console.log(word);
         if (this.isSelected(word)) {
             //this.selectedWords.splice(this.selectedWords.indexOf(word), 1);
-            this.onClickSelectedWord(el);
+
+            // Search
+            const id = this.searchItems.find(i => i.value === word).id;
+
+            const searchEl = document.getElementById(id);
+            console.log(searchEl);
+            this.onClickSelectedWord(searchEl);
         } else {
             /*this.operatorElements.push(`<div class='operator'>OR</div>`);
             this.selectedWords.push(word);*/
@@ -87,8 +93,8 @@ class SearchManager {
             const el = document.querySelector(`[data-word="${word}"]`);
             console.log((el));
 
-            el.classList.remove('unselected-word');
-            el.classList.add('selected-word');
+            el.classList.remove('word-unselected');
+            el.classList.add('word-selected');
         }
 
         for (let i = 0; i < this.selectedWords.length; i++) {
@@ -112,8 +118,8 @@ class SearchManager {
             const el = document.querySelector(`[data-word="${word}"]`);
             console.log((el));
 
-            el.classList.remove('unselected-word');
-            el.classList.add('selected-word');
+            el.classList.remove('word-unselected');
+            el.classList.add('word-selected');
         }
 
         // Add events
@@ -146,9 +152,26 @@ class SearchManager {
     }
 
     regenerateSearch() {
-        this.currentSearchElements = [];
+        console.log(this.searchItems);
+        //this.currentSearchElements = [];
         this.currentSearch = '';
 
+        const wordElements = document.getElementsByClassName('word');
+
+        for(let el of wordElements) {
+            const elWord = el.getAttribute(`data-word`);
+
+            console.log(elWord);
+            if (this.isSelected(elWord)) {
+                el.classList.remove('word-unselected');
+                el.classList.add('word-selected');
+            } else {
+                el.classList.add('word-unselected');
+                el.classList.remove('word-selected');
+            }
+
+            console.log(el.classList);
+        }
 
         for (let item of this.searchItems) {
             this.currentSearch += item.toHTMLElement();
