@@ -54,12 +54,54 @@ table td {
 .selected-word {
   margin: 4px;
   cursor: pointer;
+
+  --tw-text-opacity: 1;
+  background: #55c946bb;
 }
 
 .operator {
   margin: 4px;
   cursor: pointer;
+
+  --tw-text-opacity: 1;
+  background: #f5e612bb;
+
+  width: 38px;
+  text-align: center;
 }
+
+.info-generated-search {
+  margin-top: 24px;
+  margin-bottom: 12px;
+
+  text-align: center;
+}
+
+#getDataButton {
+  width: 84px;
+  border: 2px solid rgb(240 156 86);
+  border-radius: 0.3rem;
+  height: 30px;
+  box-shadow: 1px 1px 3px 0px;
+  font-weight: 700;
+}
+
+#copy-clipboard {
+  margin-top: 24px;
+  width: 84px;
+  border: 2px solid rgb(240 156 86);
+  border-radius: 0.3rem;
+  height: 30px;
+  box-shadow: 1px 1px 3px 0px;
+  font-weight: 700;
+  background: #ff8f0038;
+}
+
+#results {
+  justify-content: center;
+  align-items: center;
+}
+
 
 /*.search-word {
   --tw-text-opacity: 1;

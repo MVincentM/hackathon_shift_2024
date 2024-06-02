@@ -41,8 +41,6 @@ class SearchManager {
 
         console.log(word);
         if (this.isSelected(word)) {
-            //this.selectedWords.splice(this.selectedWords.indexOf(word), 1);
-
             // Search
             const id = this.searchItems.find(i => i.value === word).id;
 
@@ -50,9 +48,6 @@ class SearchManager {
             console.log(searchEl);
             this.onClickSelectedWord(searchEl);
         } else {
-            /*this.operatorElements.push(`<div class='operator'>OR</div>`);
-            this.selectedWords.push(word);*/
-
             this.searchItems.push(new SearchItem('operator', 'OR'));
             this.searchItems.push(new SearchItem('word', word));
         }
