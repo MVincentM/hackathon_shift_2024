@@ -1,0 +1,77 @@
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <link href="styles.css" rel="stylesheet" />
+    <title>Job Title Extractor</title>
+    <script src="https://unpkg.com/tailwindcss-cdn@3.4.3/tailwindcss.js"></script>
+  </head>
+  <body>
+
+    <div class="flex">
+        <img src="logo.png" alt="logo" class="size-12">
+    </div>
+
+
+
+    <h1>Job Title Extractor</h1>
+    <input id="JobTitleInput" />
+    <button id="getDataButton">Rechercher</button>
+    <button id="extractButton">Extract Job Title</button>
+    <label><b>Job title found :</b></label>
+    <p id="job-title">Développeur PHP</p>
+    <div id="results">
+      <div id="words-container">
+        <div class="dropdown-words">
+          <b>synonyms</b>
+          <div class="word" data-word="Développeur Backend">
+            Développeur Backend
+          </div>
+          <div class="word" data-word="Ingénieur Logiciel PHP">
+            Ingénieur Logiciel PHP
+          </div>
+          <div class="word" data-word="Programmeur PHP">Programmeur PHP</div>
+          <div class="word" data-word="Développeur Web PHP">
+            Développeur Web PHP
+          </div>
+        </div>
+        <div class="dropdown-words">
+          <b>hardSkills</b>
+          <div class="word" data-word="SQL">SQL</div>
+          <div class="word" data-word="MySQL">MySQL</div>
+          <div class="word" data-word="Git">Git</div>
+          <div class="word" data-word="APIs">APIs</div>
+          <div class="word" data-word="REST">REST</div>
+          <div class="word" data-word="GraphQL">GraphQL</div>
+          <div class="word" data-word="LAMP">LAMP</div>
+          <div class="word" data-word="MVC">MVC</div>
+          <div class="word" data-word="Unit Testing">Unit Testing</div>
+          <div class="word" data-word="Debugging">Debugging</div>
+        </div>
+        <div class="dropdown-words">
+          <b>programmingLanguage</b>
+          <div class="word" data-word="PHP">PHP</div>
+          <div class="word" data-word="JavaScript">JavaScript</div>
+          <div class="word" data-word="HTML">HTML</div>
+          <div class="word" data-word="CSS">CSS</div>
+          <div class="word" data-word="Python">Python</div>
+        </div>
+        <div class="dropdown-words">
+          <b>frameworks</b>
+          <div class="word" data-word="Laravel">Laravel</div>
+          <div class="word" data-word="Symfony">Symfony</div>
+          <div class="word" data-word="Zend">Zend</div>
+          <div class="word" data-word="CakePHP">CakePHP</div>
+          <div class="word" data-word="CodeIgniter">CodeIgniter</div>
+          <div class="word" data-word="Drupal">Drupal</div>
+          <div class="word" data-word="WordPress">WordPress</div>
+        </div>
+      </div>
+    </div>
+    <script src="popup.js"></script>
+    <script src="DataExtractor/HTMLExtractor.js"></script>
+    <script src="DataExtractor/DataExtractor.js"></script>
+    <script src="SearchGenerator/SearchGenerator.js"></script>
+    <script src="SearchGenerator/SearchManager.js"></script>
+    <script src="constants.js"></script>
+  </body>
+</html>

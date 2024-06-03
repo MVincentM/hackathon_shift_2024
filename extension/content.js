@@ -18,7 +18,6 @@ export async function extractJobTitle(html) {
         let extractJobTitlePrompt = 'Depuis ce code html je veux que tu me retourne le titre du poste recherché. Si tu ne trouves pas tu ne dois pas en inventer et retourner NO_JOB_TITLE_FOUND. {{data}}';
 
         extractJobTitlePrompt = extractJobTitlePrompt.replace('{{data}}', html);
-        console.log(extractJobTitlePrompt);
 
         try {
             const response = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -39,7 +38,6 @@ export async function extractJobTitle(html) {
             }
 
             const data = await response.json();
-            console.log(data);
             //document.getElementById('response').textContent = JSON.stringify(data, null, 2);
         } catch (error) {
             console.error('Erreur lors de l\'appel à l\'API ChatGPT:', error);

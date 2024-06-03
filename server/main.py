@@ -49,13 +49,15 @@ INDEX_ENDPOINT = "projects/145034832321/locations/europe-west1/indexEndpoints/49
 DEPLOYED_INDEX_ID = "jobijobai_vector_index_1717275097441"
 PROJECT_ID = "shift-aihack-nantes24-10"
 REGION = "europe-west1"
-#TEXT_MODEL = "gemini-pro"
-TEXT_MODEL = "gemini-1.5-flash-001"
+TEXT_MODEL = "gemini-pro"
+# TEXT_MODEL = "gemini-1.5-flash-001"
 
-client_options = { "api_endpoint": API_ENDPOINT }
+client_options = {"api_endpoint": API_ENDPOINT}
 
-def get_neighbors(title, n = 10):
-    vector_search_client = aiplatform_v1.MatchServiceClient(client_options = client_options)
+
+def get_neighbors(title, n=10):
+    vector_search_client = aiplatform_v1.MatchServiceClient(
+        client_options=client_options)
 
     storage_client = storage.Client.create_anonymous_client()
     bucket = storage_client.bucket("jobijobai_index_data_bucket")
@@ -64,37 +66,39 @@ def get_neighbors(title, n = 10):
         vectors = [json.loads(line) for line in f]
     v = pd.DataFrame(vectors)
     v.index = v.id
-    v.drop("id", axis = 1, inplace = True)
+    v.drop("id", axis=1, inplace=True)
 
     job_vec = job_to_vec(title)
-    datapoint = aiplatform_v1.IndexDatapoint(feature_vector = job_vec[1])
-    query = aiplatform_v1.FindNeighborsRequest.Query(datapoint = datapoint, neighbor_count = 10)
+    datapoint = aiplatform_v1.IndexDatapoint(feature_vector=job_vec[1])
+    query = aiplatform_v1.FindNeighborsRequest.Query(
+        datapoint=datapoint, neighbor_count=10)
     request = aiplatform_v1.FindNeighborsRequest(
-        index_endpoint = INDEX_ENDPOINT,
-        deployed_index_id = DEPLOYED_INDEX_ID,
-        queries = [query],
-        return_full_datapoint = False
+        index_endpoint=INDEX_ENDPOINT,
+        deployed_index_id=DEPLOYED_INDEX_ID,
+        queries=[query],
+        return_full_datapoint=False
     )
     response = vector_search_client.find_neighbors(request)
     d = v.loc[[n.datapoint.datapoint_id for n in response.nearest_neighbors[0].neighbors]]
     d["score"] = [n.distance for n in response.nearest_neighbors[0].neighbors]
-    q = d.sort_values("score", ascending = False)
+    q = d.sort_values("score", ascending=False)
     return job_vec[0], q[q.score > 0.85]
-    
 
-    datapoint = aiplatform_v1.IndexDatapoint(feature_vector = job_to_vec(title))
-    query = aiplatform_v1.FindNeighborsRequest.Query(datapoint = datapoint, neighbor_count = n)
+    datapoint = aiplatform_v1.IndexDatapoint(feature_vector=job_to_vec(title))
+    query = aiplatform_v1.FindNeighborsRequest.Query(
+        datapoint=datapoint, neighbor_count=n)
     request = aiplatform_v1.FindNeighborsRequest(
-    index_endpoint = INDEX_ENDPOINT,
-    deployed_index_id = DEPLOYED_INDEX_ID,
-    queries = [query],
-    return_full_datapoint = False
+        index_endpoint=INDEX_ENDPOINT,
+        deployed_index_id=DEPLOYED_INDEX_ID,
+        queries=[query],
+        return_full_datapoint=False
     )
     response = vector_search_client.find_neighbors(request)
     d = v.loc[[n.datapoint.datapoint_id for n in response.nearest_neighbors[0].neighbors]]
     d["score"] = [n.distance for n in response.nearest_neighbors[0].neighbors]
     print(d)
-    return d.sort_values("score", ascending = False).to_dict(index="id")
+    return d.sort_values("score", ascending=False).to_dict(index="id")
+
 
 def job_to_vec(title):
     """Embeds texts with a pre-trained, foundational model."""
@@ -106,16 +110,19 @@ def job_to_vec(title):
     embeddings = model.get_embeddings(inputs, **kwargs)
     return desc, [embedding.values for embedding in embeddings][0]
 
+
 def execute_prompt(prompt, input):
     vertexai.init(project=PROJECT_ID, location=REGION)
     model = GenerativeModel(
-    TEXT_MODEL,
-    generation_config=GenerationConfig(temperature=0.2),
-    tools=[],
-    system_instruction=prompt
+        TEXT_MODEL,
+        generation_config=GenerationConfig(temperature=0.2),
+        tools=[],
+        system_instruction=prompt
     )
     gen_response = model.generate_content(input)
-    return gen_response.text
+
+    return gen_response.text.replace("```json", "").replace("```", "")
+
 
 def format_row(row, original_job_title):
     prompt = """
@@ -124,7 +131,7 @@ You are an expert in HR. From a set of verbose skills that describe a job role, 
     Example with a Data Scientist:
     {
         "search_base": ["python", "data science", "machine learning", "master"],
-        "synonyms": ["IngÃ©nieur statisticien", "ML Engineer", "Data Analyst", ...]
+        "synonyms": ["Ingénieur statisticien", "ML Engineer", "Data Analyst", ...]
         "programming_languages": ["python", "java", "javascript"],
         "frameworks": ["django", "flask", "spring"],
         "technologies": ["aws", "azure", "gcp"],
@@ -140,10 +147,12 @@ You are an expert in HR. From a set of verbose skills that describe a job role, 
       - Synonyms are common alternative names for the job title that will provide qualified candidates for the original job title (use French and English).
       - Technologies must correspond to a technology name (eg. "aws", "azure", "gcp", "android", etc.)
       - Certifications must correspond to a certification name (eg. "certification AWS", "certification Azure", etc.)
-      - All JSON keys given as example are facultative except for "search_base" which must contain up to the 10 most relevant keywords overall (from any other category).
       - The example given above is a short, simplified version of what you can do, don't hesitate to extract more keywords from the skills description.
 
-**IT IS CRUCIAL THAT YOU ONLY OUTPUT THE RAW JSON WITHOUT ANY MARKDOWN**
+
+"search_base" should contain values coming from the other properties. Take at least 2 from synonyms and at most 10 terms in total.
+
+      
 """
     input = """
     Job title: %s
@@ -153,12 +162,13 @@ You are an expert in HR. From a set of verbose skills that describe a job role, 
     print(response)
     j = {}
     try:
-      j = json.loads(response)
-      j["job_title_esco"] = row["jobTitle"]
-      j["job_title"] = original_job_title
+        j = json.loads(response)
+        j["job_title_esco"] = row["jobTitle"]
+        j["job_title"] = original_job_title
     except Exception as e:
-      print("error: ", response, e)
+        print("error: ", response, e)
     return j
+
 
 @app.route("/", methods=['POST'])
 def get_filters():
@@ -168,13 +178,14 @@ def get_filters():
     # generated_description = execute_prompt(PROMPT_GENERATION_DESCRIPTION, text)
     desc, jobs = get_neighbors(title)
     if len(jobs) < 1:
-      j = {
-          "jobTitle": None,
-          "skills": desc
-      }
+        j = {
+            "jobTitle": None,
+            "skills": desc
+        }
     else:
-      j = jobs.iloc[0]
-    return format_row(j, title)
+        j = jobs.iloc[0]
+    final_result = format_row(j, title)
+    return final_result
 
 
 if __name__ == "__main__":

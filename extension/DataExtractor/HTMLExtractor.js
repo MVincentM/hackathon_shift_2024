@@ -1,61 +1,12 @@
-class DataExtractor {
-    jobTitle;
+const extractJobTitlePrompt = `Depuis ce code html je veux que tu me retourne le titre du poste recherché. Si tu ne trouves pas tu ne dois pas en inventer et retourner NO_JOB_TITLE_FOUND. 
+                {{data}}
+                
+                GUIDELINES:
+                - Tu dois retourner uniquement le nom du poste ou NO_JOB_TITLE_FOUND
+                - Tu dois retourner uniquement le nom du poste sans les infos annexes au job title (ex: développeur JAVA H/F 25455552 devient développeur JAVA)
+                `;
 
-    constructor(jobTitle) {
-        this.jobTitle = jobTitle;
-    }
-
-    async extractData() {
-
-    const prompt = jobTitleDataExtractor.replace('{{jobTitle}}', this.jobTitle);
-    console.log(prompt);
-
-    // Call OpenAI
-    try {
-        const response = await fetch(
-        "https://api.openai.com/v1/chat/completions",
-        {
-            method: "POST",
-            headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${OPEN_AI_KEY}`,
-            },
-            body: JSON.stringify({
-            model: "gpt-4o", // Utilisez le modèle que vous souhaitez
-            messages: [
-                /*{ role: "system", content: jobTitleSynonymsPrompt },
-                { role: "user", content: this.jobTitle },*/
-                { role: "user", content: prompt }
-            ],
-            temperature: 0.7
-            }),
-        }
-        );
-
-        if (!response.ok) {
-        throw new Error(`Erreur HTTP! statut: ${response.status}`);
-        }
-
-        let result = ((await response.json()).choices[0].message.content).replace('```json', '').replace('```', '');
-
-        const data = JSON.parse(result);
-        console.log(data);
-
-        const searchGenerator = new SearchGenerator(data);
-        searchGenerator.generateHTML();
-
-        document.getElementById("job-title").textContent = this.jobTitle;
-    } catch (error) {
-        console.error("Erreur lors de l'appel à l'API ChatGPT:", error);
-        document.getElementById("job-title").textContent =
-        "Erreur lors de l'appel à l'API";
-    }
-    }
-}
-
-
-
-const jobTitleSynonymsPrompt = `--- GENERAL INSTRUCTIONS ---
+/*const jobTitleSynonymsPrompt = `--- GENERAL INSTRUCTIONS ---
 
 You are a specialist in HR and a very good head hunter.
 Your goal is to extract the semantic of a job title in order to create multiple search queries to broaden the results you can get from different profile websites.
@@ -103,23 +54,56 @@ Generate relevant results but DO NOT GENERATE jobs that are not fully related to
 
 *EXPECTED OUTPUT*
 [ { "jobTitle": "Directeur Adjoint", "skills": [], "seniority": null, "industry": "mechanical or industrial engineering", "keywords": [] }, { "jobTitle": "Directeur des Opérations d'Usine", "skills": [], "seniority": null, "industry": null, "keywords": [] }, { "jobTitle": "Directeur des Opérations", "skills": [], "seniority": null, "industry": "mechanical or industrial engineering", "keywords": [] }, { "jobTitle": "Responsable de Production Industrielle", "skills": [], "seniority": null, "industry": null, "keywords": [] }, { "jobTitle": "Responsable de Production", "skills": [], "seniority": null, "industry": "mechanical or industrial engineering", "keywords": [] }, { "jobTitle": "Chef de Site Industriel", "skills": [], "seniority": null, "industry": null, "keywords": [] }, { "jobTitle": "Chef de Site", "skills": [], "seniority": null, "industry": "mechanical or industrial engineering", "keywords": [] }, { "jobTitle": "Directeur de Fabrication", "skills": [], "seniority": null, "industry": null, "keywords": [] }, { "jobTitle": "Responsable des Opérations de Production", "skills": [], "seniority": null, "industry": null, "keywords": [] }, { "jobTitle": "Responsable des Opérations",
-"skills": [], "seniority": null, "industry": "mechanical or industrial engineering", "keywords": [] } ]`;
+"skills": [], "seniority": null, "industry": "mechanical or industrial engineering", "keywords": [] } ]`;*/
 
-const jobTitleDataExtractor = `Tu es un chercheur de têtes. A partir du nom d'un métier, tu es capable d'en déterminer tous les synonymes qui correspondent au metier {{jobTitle}} et tout ce qui est pertinent pour trouver le candidat idéal.
 
-GUIDELINES:
-- La réponse doit etre un objet JSON contenant toutes les informations et uniquement un objet JSON
-- La réponse doit au minimum contenir synonyms et skills
-- En plus des résulats de base, la réponse doit contenir un attribut nommé 'search_base' avec maximum 10 des résultats: les plus cohérent pour faire une recherche
-- Les résultats doivent etre contenus dans un tableau JSON
-- Les résultats doivent etre le plus succinct possible
-- Les résultats ne doivent pas contenir de soft skills
-- Les résultats ne doivent pas etre des phrases mais des mots clés
+class HTMLExtractor {
+  constructor(html) {
+    this.html = html;
+  }
 
-/*JSON Format Réponse Object:
-jobTitle: string // Job TItle from the input
-synonyms: string[]
-hardSkills: string[]
-programmingLanguage: string[]
-frameworks: string[] // frameworks and tools
--search_base: string[] // array of the 10 most relevants string from all the other arrays if this object to use*/`
+  async extractJobTitle() {
+    const cleanHtml = this.html.replace(/<[^>]*>/g, "");
+    let prompt = extractJobTitlePrompt.replace("{{data}}", cleanHtml);
+
+    // Call OpenAI
+    try {
+      const response = await fetch(
+        "https://api.openai.com/v1/chat/completions",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${OPEN_AI_KEY}`,
+          },
+          body: JSON.stringify({
+            model: "gpt-4o", // Utilisez le modèle que vous souhaitez
+            messages: [{ role: "user", content: prompt }],
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`Erreur HTTP! statut: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      const jobTitle = data.choices[0].message.content;
+
+      document.getElementById("job-title").textContent = jobTitle;
+      document.getElementById("JobTitleInput").value = jobTitle;
+
+      if (jobTitle !== "JOB_TITLE_NOT_FOUND") {
+        this.jobTitle = jobTitle;
+
+        await new DataExtractor(jobTitle).extractData();
+      }
+
+      
+    } catch (error) {
+      console.error("Erreur lors de l'appel à l'API ChatGPT:", error);
+      document.getElementById("job-title").textContent = "Erreur lors de l'appel à l'API";
+    }
+  }
+}
